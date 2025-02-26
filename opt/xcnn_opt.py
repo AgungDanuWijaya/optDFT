@@ -353,7 +353,7 @@ def loss1(weight, is_eval=False):
 
 if __name__ == "__main__":
     w_ = [0.2]
-    dir = "/home/agung/PycharmProjects/pkpt/data_/"
+    dir = "/data_/"
 
     param = ng.p.Array(
         shape=(hidden[0] * (input_dim + 1) + hidden[1] * (hidden[0] + 1) + hidden[2] * (hidden[1] + 2),)).set_bounds(
