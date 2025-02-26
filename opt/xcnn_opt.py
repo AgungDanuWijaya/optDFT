@@ -31,7 +31,7 @@ def lyp(rho01, rho02, gamma1, gamma2, gamma12):
     ml_in_ = np.concatenate((rho01.reshape((-1, 1)), rho02.reshape((-1, 1)), gamma1.reshape((-1, 1)),
                              gamma2.reshape((-1, 1)), gamma12.reshape((-1, 1))), axis=1)
     ml_in = torch.Tensor(ml_in_)
-    ml_in.requires_grad = True
+    ml_in.requires_grad = False
     exc_ml_out = s_nn(ml_in, is_training_data=False)
     ml_exc = exc_ml_out.detach().numpy()
     exc = (ml_exc).reshape(-1)
@@ -85,8 +85,8 @@ def eval_xc_gga(xc_code, rho, spin, relativity=0, deriv=2, verbose=None, omega=N
 
 
 def loss1(weight, is_eval=False):
-
     try:
+
         loss = 999
         w = torch.Tensor(weight)
         # print("weight in: ","\n",w)
@@ -248,9 +248,9 @@ def loss1(weight, is_eval=False):
             for jk__ in x_:
                     mol = gto.Mole()
                     mol.verbose = 1
-                    mol.atom = "" + read_data.read_g(jk_,dir) + ""
+                    mol.atom = "" + read_data.read_g(jk__,dir) + ""
                     mol.charge = 0
-                    mol.spin = int(read_data.read_spin(jk_,dir))
+                    mol.spin = int(read_data.read_spin(jk__,dir))
                     mol.basis = "cc-pvdz"
                     mol.build()
                     mfl = dft.UKS(mol)
@@ -274,18 +274,15 @@ def loss1(weight, is_eval=False):
             index_ = index_ + 1
         total_ae = total_ae
         dat = ("Cl2,Cl2_}P2,P2_}CO,CO_}C2H4,C2H4_}C2H2,C2H2_}"
-               "HCl,HCl_}PH3,PH3_}PH2,PH2_}sih4,sih4_}hf,hf_}h2o,h2o_}OH,OH_}NH3,NH3_}"
+               "HCl,HCl_}PH3,PH3_}PH2,PH2_}SiH4,SiH4_}HF,HF_}H2O,H2O_}OH,OH_}NH3,NH3_}"
                "He,He_}Li,Li_}Be,Be_}B,B_}C,C_}N,N_}O,O_}F,F_}Ne,Ne_}Na,Na_}Mg,Mg_}Al,Al_}Si,Si_}P,P_}S,S_}Cl,Cl_}Ar,Ar_}"
                "BeH,BeH_}H2O,H2O_}CH3,CH3_}C2H4O,C2H4O_}HCOOH,HCOOH_")
-
         dat_ae = [11.48, 10.53, 14.01, 10.51, 11.40,
                   12.74, 9.87, 9.82, 11.00, 16.03, 12.62, 13.02, 10.07,
                   24.59, 5.39, 9.32, 8.30, 11.26, 14.53, 13.62, 17.42, 21.56, 5.14, 7.65, 5.99, 8.15, 10.49, 10.36,
                   12.97,
                   15.76, 8.21, 12.62, 9.84, 10.56, 11.33, 12.61
-
                   ]
-
         x = dat.split("}")
 
         mydict = {'asa': 32}
@@ -300,11 +297,11 @@ def loss1(weight, is_eval=False):
             for jk__ in x_:
                     mol = gto.Mole()
                     mol.verbose = 1
-                    mol.atom = "" + read_data.read_g(jk_,dir) + ""
+                    mol.atom = "" + read_data.read_g(jk__,dir) + ""
                     mol.charge = 0
                     if "_" in jk__:
                         mol.charge = 1
-                    mol.spin = int(read_data.read_spin(jk_,dir))
+                    mol.spin = int(read_data.read_spin(jk__,dir))
                     mol.basis = "cc-pvdz"
                     mol.build()
                     kk = 0
@@ -351,7 +348,8 @@ def loss1(weight, is_eval=False):
         indicator = 0
         return loss, indicator
     except:
-        return 1000000000, 1
+        return 9000000, 1
+
 
 if __name__ == "__main__":
     w_ = [0.2]
